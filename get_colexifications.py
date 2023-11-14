@@ -55,42 +55,62 @@ table = [[
     "OvertMarkingsLanguage",
     "OppositeOvertMarkingsLanguage"
     ]]
+
+missing = set()
+
+mods = {
+        "RIVER": "FLOWING BODY OF WATER",
+        "BELLY OR STOMACH": "STOMACH",
+        "BRANCH": "BRANCH OR TWIG",
+        }
 with UnicodeDictReader('relations-urban-2011.tsv', delimiter="\t") as reader:
     for row in reader:
-        sgloss, tgloss = id2gloss[row["Source_ID"]], id2gloss[row["Target_ID"]]
-        try:
-            overt_fam = graph[sgloss][tgloss]["family_count"]
-            overt_lang = graph[sgloss][tgloss]["language_count"]
-        except:
-            overt_fam = 0
-            overt_lang = 0
-            print(sgloss, tgloss)
+        sgloss, tgloss = (
+                mods.get(id2gloss[row["Source_ID"]], id2gloss[row["Source_ID"]]),
+                mods.get(id2gloss[row["Target_ID"]],
+                         id2gloss[row["Target_ID"]]))
+        if sgloss in graph and tgloss in graph:
+            try:
+                overt_fam = graph[sgloss][tgloss]["family_count"]
+                overt_lang = graph[sgloss][tgloss]["language_count"]
+            except:
+                overt_fam = 0
+                overt_lang = 0
+                print(sgloss, tgloss)
 
-        try:
-            opp_fam = graph[tgloss][sgloss]["family_count"]
-            opp_lang = graph[tgloss][sgloss]["language_count"]
-        except:
-            opp_fam = 0
-            opp_lang = 0
-            print(tgloss, sgloss)
+            try:
+                opp_fam = graph[tgloss][sgloss]["family_count"]
+                opp_lang = graph[tgloss][sgloss]["language_count"]
+            except:
+                opp_fam = 0
+                opp_lang = 0
+                print(tgloss, sgloss)
 
 
-        new_row = [
-                row["Number"],
-                row["Source"],
-                row["Source_ID"],
-                row["Source_Con"],
-                row["Target"],
-                row["Target_ID"],
-                row["Target_Con"],
-                row["Polysemies"],
-                row["OvertMarkings"],
-                "",
-                int(overt_fam),
-                int(overt_lang),
-                int(opp_fam),
-                int(opp_lang)]
-        table += [new_row]
+            new_row = [
+                    row["Number"],
+                    row["Source"],
+                    row["Source_ID"],
+                    row["Source_Con"],
+                    row["Target"],
+                    row["Target_ID"],
+                    row["Target_Con"],
+                    row["Polysemies"],
+                    row["OvertMarkings"],
+                    "",
+                    int(overt_fam),
+                    int(opp_fam),
+                    int(overt_lang),
+                    int(opp_lang)]
+            table += [new_row]
+        else:
+            if not sgloss in graph:
+                missing.add(sgloss)
+            if not tgloss in graph:
+                missing.add(tgloss)
 
 with UnicodeWriter("urban-vs-clips.tsv", delimiter="\t") as writer:
     writer.writerows(table)
+
+for gl in missing:
+    print("missing", gl)
