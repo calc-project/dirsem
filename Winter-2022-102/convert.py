@@ -87,7 +87,7 @@ with open("edges.tsv", "w") as f:
                     target["overt_marking"]))
 
 with open("Winter-2022-102.tsv", "w") as f:
-    f.write("ID\tENGLISH\tCONCEPTICON_ID\tCONCEPTICON_GLOSS\tSOURCES\tTARGETS\n")
+    f.write("ID\tNUMBER\tENGLISH\tCONCEPTICON_ID\tCONCEPTICON_GLOSS\tSOURCES\tTARGETS\n")
     table = []
     for concept in graph:
         # get concept mappings
@@ -98,11 +98,12 @@ with open("Winter-2022-102.tsv", "w") as f:
             cid, cgl = "", ""
         table += [[
             "Winter-2022-102-{0}".format(row2idx[concept]),
+            str(row2idx[concept]),
             concept,
             cid, 
             cgl,
             json.dumps(graph[concept]["sources"]),
             json.dumps(graph[concept]["targets"]),
             ]]
-    for row in sorted(table):
+    for row in sorted(table, key=lambda x: int(x[1])):
         f.write("\t".join(row)+"\n")
