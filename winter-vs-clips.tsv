@@ -1,0 +1,121 @@
+Number	Source	Source_ID	Source_Con	Target	Target_ID	Target_Con	Polysemies_Urban	OvertMarkings_Urban	Polysemies_CLICS	OvertMarkingsFamily	OppositeOvertMarkingsFamily	OvertMarkingsLanguage	OppositeOvertMarkingsLanguage
+1	cloud	1489		day	1225	4.31	2	3		0	2	0	2
+1	cloud	1489		fog/mist	249	4.66	24	7		11	3	29	5
+1	cloud	1489		rain	658		4	2		0	4	0	8
+1	cloud	1489		sky	1732	4.45	8	11		2	14	2	18
+1	cloud	1489		smoke	778		7	0		3	4	3	4
+10	bird	937	5.00	animal	619	4.61	8	0		0	3	0	3
+11	lake	624	4.88	swamp	1145	4.96	8	4		1	3	1	3
+12	swamp	1145	4.96	lake	624	4.88	8	0		3	1	3	1
+13	dust	2	4.40	ashes	646	4.92	22	2		7	2	9	2
+13	dust	2	4.40	smoke	778		8	0		0	2	0	3
+13	dust	2	4.40	soil/earth	1228	4.87	15	15		1	16	1	24
+14	tree	906	5.00	branch	1531	4.64	6	17		17	0	35	0
+14	tree	906	5.00	forest	420	4.76	4	6		13	1	22	1
+15	branch	1531	4.64	tree	906	5.00	6	0		0	17	0	35
+16	ashes	646	4.92	dust	2	4.40	22	6		2	7	2	9
+16	ashes	646	4.92	embers	67		6	2		1	0	2	0
+17	embers	67		ashes	646	4.92	6	0		0	1	0	2
+17	embers	67		flame	889	4.67	6	2		2	7	2	7
+18	forest	420	4.76	tree	906	5.00	4	0		1	13	1	22
+19	day	1225	4.31	clock	1323	5.00	2	0		7	2	8	2
+19	day	1225	4.31	cloud	1489		2	0		2	0	2	0
+19	day	1225	4.31	dawn	729	4.46	3	20		11	0	29	0
+19	day	1225	4.31	noon	12	2.67	3	20		22	0	59	0
+2	fog/mist	249	4.66	cloud	1489		24	0		3	11	5	29
+2	fog/mist	249	4.66	dew	1977	4.38	9	2		4	2	6	6
+2	fog/mist	249	4.66	smoke	778		10	0		2	9	2	12
+20	dawn	729	4.46	day	1225	4.31	3	0		0	11	0	29
+23	noon	12	2.67	day	1225	4.31	2	0		0	22	0	59
+23	noon	12	2.67	sun	1343	4.83	2	0		0	21	0	34
+24	honey	942	4.88	wax	1931	4.88	2	4		10	5	16	5
+25	wax	1931	4.88	honey	942	4.88	2	0		5	10	5	16
+26	bone	1394	4.90	horn	1393		2	2		1	2	1	2
+26	bone	1394	4.90	needle	1382	4.93	2	0		2	1	3	2
+27	horn	1393		bone	1394	4.90	2	0		2	1	2	1
+28	river/stream	3311	4.89	flood	613	4.62	2	2		5	0	6	0
+28	river/stream	3311	4.89	spring	1537		12	0		1	0	1	0
+29	flood	613	4.62	river/stream	3311	4.89	2	0		0	5	0	6
+3	sun	1343	4.83	clock	1323	5.00	15	16		10	0	15	0
+3	sun	1343	4.83	moon	1313	4.90	17	3		4	0	4	0
+3	sun	1343	4.83	noon	12	2.67	2	24		21	0	34	0
+30	breast	1402	5.00	milk	635	4.92	43	30		12	1	30	1
+31	milk	635	4.92	breast	1402	5.00	43	0		1	12	1	30
+31	milk	635	4.92	nipple	796	4.83	5	4		7	6	19	8
+32	mouth	674	4.74	beak	73	4.96	18	11		10	1	33	2
+32	mouth	674	4.74	cheek	1730	4.83	2	3		2	0	2	0
+32	mouth	674	4.74	lip	478	4.96	16	31		23	1	49	2
+33	lip	478	4.96	mouth	674	4.74	16	0		1	23	2	49
+34	belly/stomach	2114	4.70	heart	1223	4.52	7	0		0	0	0	0
+34	belly/stomach	2114	4.70	navel	1838	4.71	2	3		2	0	4	0
+34	belly/stomach	2114	4.70	womb	804	4.37	11	6		5	0	6	0
+35	womb	804	4.37	belly/stomach	2114	4.70	11	0		0	5	0	6
+36	heart	1223	4.52	belly/stomach	2114	4.70	7	2		0	0	0	0
+36	heart	1223	4.52	kidney	489	4.96	3	3		0	1	0	1
+36	heart	1223	4.52	lungs	688	4.82	2	3		2	1	4	1
+37	nipple	796	4.83	milk	635	4.92	5	0		6	7	8	19
+38	liver	1224	4.68	lungs	688	4.82	4	9		4	1	5	1
+39	lungs	688	4.82	foam	1768	4.85	3	0		0	1	0	1
+39	lungs	688	4.82	heart	1223	4.52	2	0		1	2	1	4
+39	lungs	688	4.82	liver	1224	4.68	4	0		1	4	1	5
+4	moon	1313	4.90	star	1430	4.69	2	0		2	1	4	1
+4	moon	1313	4.90	sun	1343	4.83	17	0		0	4	0	4
+42	kidney	489	4.96	heart	1223	4.52	3	0		1	0	1	0
+43	mirror	1171	4.97	shadow	1388	4.54	3	0		0	2	0	4
+45	(molar) tooth	1380	4.89	jaw	798	4.87	2	3		6	0	7	0
+46	jaw	798	4.87	(molar) tooth	1380	4.89	2	0		0	6	0	7
+46	jaw	798	4.87	chin	1510	4.89	44	5		4	8	7	19
+47	navel	1838	4.71	belly/stomach	2114	4.70	2	0		0	2	0	4
+48	cheek	1730	4.83	buttocks	834	4.83	2	3		4	2	11	2
+48	cheek	1730	4.83	mouth	674	4.74	2	0		0	2	0	2
+49	buttocks	834	4.83	cheek	1730	4.83	2	0		2	4	2	11
+5	grass	606	4.93	straw/hay	342	4.87	11	10		15	2	48	2
+50	skin	763		bark	1204	4.52	45	26		19	6	42	6
+51	bark	1204	4.52	skin	763		45	0		6	19	6	42
+52	beak	73	4.96	mouth	674	4.74	18	0		1	10	2	33
+52	beak	73	4.96	tooth	1380	4.89	9	2		0	2	0	2
+54	foam	1768	4.85	lungs	688	4.82	3	2		1	0	1	0
+55	house	1252	5.00	nest	539		7	14		9	0	11	0
+56	nest	539		bed	1663	5.00	2	0		0	2	0	2
+56	nest	539		house	1252	5.00	7	0		0	9	0	11
+58	tongue	1205	4.93	flame	889	4.67	2	24		9	0	29	0
+59	flame	889	4.67	embers	67		6	0		7	2	7	2
+59	flame	889	4.67	tongue	1205	4.93	2	0		0	9	0	29
+6	straw/hay	342	4.87	grass	606	4.93	11	0		2	15	2	48
+62	bed	1663	5.00	nest	539		2	2		2	0	2	0
+63	egg	744	4.97	testicle	797	4.59	20	9		12	2	24	2
+64	testicle	797	4.59	ball	1845	5.00	4	2		0	2	0	2
+64	testicle	797	4.59	egg	744	4.97	20	0		2	12	2	24
+64	testicle	797	4.59	seed	714	4.71	6	0		0	8	0	10
+65	clock	1323	5.00	day	1225	4.31	2	8		2	7	2	8
+65	clock	1323	5.00	sun	1343	4.83	15	0		0	10	0	15
+66	seed	714	4.71	testicle	797	4.59	6	6		8	0	10	0
+67	shadow	1388	4.54	mirror	1171	4.97	3	5		2	0	4	0
+69	ball	1845	5.00	testicle	797	4.59	4	0		2	0	2	0
+7	smoke	778		cloud	1489		7	2		4	3	4	3
+7	smoke	778		dust	2	4.40	8	4		2	0	3	0
+7	smoke	778		fog/mist	249	4.66	10	3		9	2	12	2
+70	needle	1382	4.93	bone	1394	4.90	2	2		1	2	2	3
+71	tooth	1380	4.89	beak	73	4.96	9	0		2	0	2	0
+72	dew	1977	4.38	fog/mist	249	4.66	9	0		2	4	6	6
+73	soil/earth	1228	4.87	dust	2	4.40	15	0		16	1	24	1
+74	pen	794	4.92	feather	1201	4.90	3	3		1	1	1	1
+75	feather	1201	4.90	beard	678	4.96	2	0		7	0	17	0
+75	feather	1201	4.90	pen	794	4.92	3	0		1	1	1	1
+76	beard	678	4.96	feather	1201	4.90	2	10		0	7	0	17
+78	star	1430	4.69	moon	1313	4.90	2	5		1	2	1	4
+82	rain	658		cloud	1489		4	2		4	0	8	0
+82	rain	658		sky	1732	4.45	3	2		1	1	1	1
+83	sky	1732	4.45	cloud	1489		8	2		14	2	18	2
+83	sky	1732	4.45	rain	658		3	0		1	1	1	1
+84	spring	1537		river/stream	3311	4.89	12	2		0	1	0	1
+86	brain	1583	4.69	pus	1808	4.52	2	4		0	1	0	1
+87	pus	1808	4.52	brain	1583	4.69	2	0		1	0	1	0
+88	eyelash	1540	5.00	eyebrow	1173	4.85	26	3		3	5	5	8
+88	eyelash	1540	5.00	eyelid	17	5.00	9	5		2	7	2	12
+89	eyebrow	1173	4.85	eyelash	1540	5.00	26	0		5	3	8	5
+9	animal	619	4.61	bird	937	5.00	8	8		3	0	3	0
+90	eyelid	17	5.00	eyelash	1540	5.00	9	0		7	2	12	2
+91	finger	1303	5.00	fingernail	1258	4.93	3	7		9	1	13	1
+92	fingernail	1258	4.93	finger	1303	5.00	3	0		1	9	1	13
+96	chin	1510	4.89	jaw	798	4.87	44	3		8	4	19	7

@@ -63,7 +63,7 @@ mods = {
         "BELLY OR STOMACH": "STOMACH",
         "BRANCH": "BRANCH OR TWIG",
         }
-with UnicodeDictReader('relations-urban-2011.tsv', delimiter="\t") as reader:
+with UnicodeDictReader('relations-winter-2022.tsv', delimiter="\t") as reader:
     for row in reader:
         sgloss, tgloss = (
                 mods.get(id2gloss[row["Source_ID"]], id2gloss[row["Source_ID"]]),
@@ -109,7 +109,7 @@ with UnicodeDictReader('relations-urban-2011.tsv', delimiter="\t") as reader:
             if not tgloss in graph:
                 missing.add(tgloss)
 
-with UnicodeWriter("urban-vs-clips.tsv", delimiter="\t") as writer:
+with UnicodeWriter("winter-vs-clips.tsv", delimiter="\t") as writer:
     writer.writerows(table)
 
 for gl in missing:
