@@ -19,7 +19,7 @@ library(dplyr)
 Loading data
 ```{r}
 winter_data<-read.csv('C:\\Users\\dinata01\\Documents\\DirSem\\Winter-2022-98.tsv',sep='\t') ##data about over marking from Winter
-ground_truth<-read.csv('C:\\Users\\dinata01\\Documents\\DirSem\\ground_truth_Winter.csv',sep=';')  ##data about linguistic change from Urban
+ground_truth<-read.csv('C:\\Users\\dinata01\\Documents\\DirSem\\gold_standard_Urban.csv',sep=';')  ##data about linguistic change from Urban
 ```
 
 Restructuring data in a proper dataframe
