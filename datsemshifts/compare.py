@@ -106,7 +106,7 @@ for concept, (c1, c2) in concepts.items():
 
 
     for edge, vals in edges.items():
-        if vals[0] or vals[1]:
+        if edge and (vals[0] or vals[1]):
             table += [[concept, edge] + vals]
 
 with UnicodeWriter("dss-clips.tsv", delimiter="\t") as writer:
