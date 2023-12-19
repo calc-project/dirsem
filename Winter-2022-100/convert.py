@@ -13,7 +13,7 @@ correct = {
 
 # read in data
 data = defaultdict(list)
-with UnicodeDictReader("asymmetry/data/asymmetry.csv") as reader:
+with UnicodeDictReader("raw/asymmetry.csv") as reader:
     for row in reader:
         concept = correct.get(row["ConceptComplete"], row["ConceptComplete"])
         if row["ID"] == "65" and row["Word"] == "river":
@@ -76,7 +76,16 @@ with open("edges.tsv", "w") as f:
                     target["overt_marking"]))
 
 with open("Winter-2022-100.tsv", "w") as f:
-    f.write("ID\tNUMBER\tENGLISH\tCONCEPTICON_ID\tCONCEPTICON_GLOSS\tSOURCE_CONCEPTS\tTARGET_CONCEPTS\n")
+    f.write("\t".join([
+        "ID",
+        "NUMBER",
+        "ENGLISH",
+        "CONCEPTICON_ID",
+        "CONCEPTICON_GLOSS",
+        "SOURCE_CONCEPTS",
+        "TARGET_CONCEPTS",
+        ])+"\n"
+            )
     table = []
     for concept in graph:
         # get concept mappings
