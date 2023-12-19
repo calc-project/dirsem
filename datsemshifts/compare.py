@@ -53,7 +53,7 @@ for concept, (c1, c2) in concepts.items():
 
 
     for edge, (a, b, c, d, e, f) in edges.items():
-        if a:
+        if a or d:
             table += [[concept, edge, a, b, c, d, e, f]]
 
 with UnicodeWriter("dss-clips.tsv", delimiter="\t") as writer:
