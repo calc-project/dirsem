@@ -23,9 +23,9 @@ for concept in clips.concepts.values():
     if concept.concepticon_gloss in common_concepts:
         concepts[concept.concepticon_gloss] += [concept]
 
-table = [
-        "Source\tTarget\tDatSemShifts\tCLIPS_Languages\tCLIPS_Families\tPolysemyDSS\tPolysemyCLIPS_Languages\tPolysemyCLIPS_Families\n"
-        ]
+table = [[
+        "Source", "Target", "DatSemShifts", "CLIPS_Languages", "CLIPS_Families", "PolysemyDSS", "PolysemyCLIPS_Languages", "PolysemyCLIPS_Families"
+        ]]
 for concept, (c1, c2) in concepts.items():
     edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0])
     for edge in c1.attributes["target_concepts"]:
@@ -57,6 +57,8 @@ for concept, (c1, c2) in concepts.items():
             table += [[concept, edge, a, b, c, d, e, f]]
 
 with UnicodeWriter("dss-clips.tsv", delimiter="\t") as writer:
-    for row in table:
+    writer.writerow(table[0])
+
+    for row in sorted(table[1:]):
         writer.writerow(row)
 
