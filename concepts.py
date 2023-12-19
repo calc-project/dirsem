@@ -12,7 +12,7 @@ id2ratings = {v["concepticon_id"]:
                nor.datasets["Brysbaert-2014-Concreteness"].concepts.items()}
 
 
-clist = models.Conceptlist.from_file("Winter-2022-100/Winter-2022-100.tsv")
+clist = models.Conceptlist.from_file("Winter-2022-98/Winter-2022-98.tsv")
 
 # get concept to concepticon ID to have all data at hand
 concept2id = {}
