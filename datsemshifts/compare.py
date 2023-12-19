@@ -83,7 +83,7 @@ table = [[
     "Polysemy_Families"]]
 
 for concept, (c1, c2) in concepts.items():
-    edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0, 0, 0, 0])
     for edge, vals in c1.items():
         if edge in eng2con:
             edges[eng2con[edge]][0] += vals["Directed"]
