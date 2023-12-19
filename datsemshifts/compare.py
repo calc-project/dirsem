@@ -98,7 +98,7 @@ table = [[
 for concept, (c1, c2) in concepts.items():
     edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     for edge, vals in c1.items():
-        if edge in eng2con:
+        if edge in eng2con and eng2con[edge] in common_concepts:
             edges[eng2con[edge]][0] += vals["Directed"]
             edges[eng2con[edge]][1] += vals["Directed_Evidence"].count("Polysemy")
             edges[eng2con[edge]][2] += vals["Directed_Evidence"].count("Derivation")
@@ -138,3 +138,28 @@ with UnicodeWriter("dss-clips.tsv", delimiter="\t") as writer:
     for row in table[1:]:
         writer.writerow(row)
 
+from scipy.stats import kendalltau
+from tabulate import tabulate
+tab = []
+for i, j in [
+        (2, 11),
+        (3, 11),
+        (4, 11),
+        (5, 11),
+        (6, 11),
+        (7, 11),
+        (8, 11),
+        (2, 12),
+        (3, 12),
+        (4, 12),
+        (5, 12),
+        (6, 12),
+        (7, 12),
+        (8, 12),
+
+        ]:
+    a = [row[i] for row in table[1:]]
+    b = [row[j] for row in table[1:]]
+    p, r = kendalltau(a, b)
+    tab += [[table[0][i], table[0][j], p, r]]
+print(tabulate(tab, floatfmt=".2f"))
