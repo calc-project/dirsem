@@ -24,41 +24,43 @@ with UnicodeDictReader("big-table.tsv", delimiter="\t") as reader:
         dss_data += [row]
 
 # unify representation to one graph
-graph = defaultdict(lambda : defaultdict(lambda : {"Languages": [], "Words": [], "Directed": 0,
-                              "Undirected": 0, "Polysemy": 0, "Derivation": 0,
-                              "Other": 0}))
+graph = defaultdict(
+        lambda : defaultdict(
+            lambda : {
+                "Directed": 0,
+                "Directed_Evidence": [],
+                "Directed_Languages": [],
+                "Directed_Words": [],
+                "Undirected": 0, 
+                "Undirected_Evidence": [],
+                "Undirected_Languages": [],
+                "Undirected_Words": []
+                }))
+
 for row in dss_data:
+    s, t = row["SOURCE"], row["TARGET"]
     # check if polysemy or shift
     if row["Direction"] in ['—', '↔']:
-        directed = 0
-        undirected = 1
-    elif row["Direction"] == "→":
-        directed = 1
-        undirected = 0
-    elif row["Direction"] == "←":
-        directed = 1
-        undirected = 0
-        row["SOURCE"], row["TARGET"] = row["TARGET"], row["SOURCE"]
+        graph[s][t]["Undirected"] += 1
+        graph[t][s]["Undirected"] += 1
+        graph[s][t]["Undirected_Evidence"] += [row["Type"]]
+        graph[t][s]["Undirected_Evidence"] += [row["Type"]]
+        graph[s][t]["Undirected_Languages"] += [row["Language"]]
+        graph[t][s]["Undirected_Languages"] += [row["Language"]]
+        graph[s][t]["Undirected_Words"] += [row["Word"]]
+        graph[t][s]["Undirected_Words"] += [row["Word"]]
 
-    if row["Type"] == "Polysemy":
-        polysemy = 1
-        derivation = 0
-        other = 1
-    elif row["Type"] == "Derivation":
-        polysemy = 0
-        derivation = 1
-        other = 1
-    else:
-        polysemy, derivation = 0, 0
-        other = 1
+    elif row["Direction"] == "→":
+        graph[s][t]["Directed"] += 1
+        graph[s][t]["Directed_Evidence"] += [row["Type"]]
+        graph[s][t]["Directed_Languages"] += [row["Language"]]
+        graph[s][t]["Directed_Words"] += [row["Word"]]
     
-    graph[row["SOURCE"]][row["TARGET"]]["Directed"] += directed
-    graph[row["SOURCE"]][row["TARGET"]]["Undirected"] += undirected
-    graph[row["SOURCE"]][row["TARGET"]]["Polysemy"] += polysemy
-    graph[row["SOURCE"]][row["TARGET"]]["Derivation"] += derivation
-    graph[row["SOURCE"]][row["TARGET"]]["Other"] += other
-    graph[row["SOURCE"]][row["TARGET"]]["Languages"] += [row["Language"]]
-    graph[row["SOURCE"]][row["TARGET"]]["Words"] += [row["Word"]]
+    elif row["Direction"] == "←":
+        graph[t][s]["Directed"] += 1
+        graph[t][s]["Directed_Evidence"] += [row["Type"]]
+        graph[t][s]["Directed_Languages"] += [row["Language"]]
+        graph[t][s]["Directed_Words"] += [row["Word"]]
 
 
 eng2con = {c.english: c.concepticon_gloss for c in dss.concepts.values() if
@@ -77,32 +79,53 @@ for concept in clips.concepts.values():
         concepts[concept.concepticon_gloss] += [concept]
 
 table = [[
-    "Source", "Target", "Directed", "Undirected", "Derivation", "Polysemy",
-    "Other",
-    "OvertMarking_Languages", "OvertMarking_Families", "Polysemy_Languages",
-    "Polysemy_Families"]]
+    "Source", 
+    "Target", 
+    "Directed", 
+    "Directed_Polysemy",
+    "Directed_Derivation",
+    "Directed_Other",
+    "Undirected", 
+    "Undirected_Polysemy",
+    "Undirected_Derivation",
+    "Undirected_Other",
+    "OvertMarking_Languages", 
+    "OvertMarking_Families", 
+    "Polysemy_Languages",
+    "Polysemy_Families"
+    ]]
 
 for concept, (c1, c2) in concepts.items():
-    edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0, 0, 0, 0])
+    edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     for edge, vals in c1.items():
         if edge in eng2con:
             edges[eng2con[edge]][0] += vals["Directed"]
-            edges[eng2con[edge]][1] += vals["Undirected"]
-            edges[eng2con[edge]][2] += vals["Derivation"]
-            edges[eng2con[edge]][3] += vals["Polysemy"]
-            edges[eng2con[edge]][4] += vals["Other"]
+            edges[eng2con[edge]][1] += vals["Directed_Evidence"].count("Polysemy")
+            edges[eng2con[edge]][2] += vals["Directed_Evidence"].count("Derivation")
+            edges[eng2con[edge]][3] += len([x for x in
+                                            vals["Directed_Evidence"] if
+                                            x not in ["Polysemy",
+                                                      "Derivation"]])
+            edges[eng2con[edge]][4] += vals["Undirected"]
+            edges[eng2con[edge]][5] += vals["Undirected_Evidence"].count("Polysemy")
+            edges[eng2con[edge]][6] += vals["Undirected_Evidence"].count("Derivation")
+            edges[eng2con[edge]][7] += len([x for x in
+                                            vals["Undirected_Evidence"] if
+                                            x not in ["Polysemy",
+                                                      "Derivation"]])
+
 
     for edge in c2.attributes["target_concepts"]:
         target = clips.concepts[edge["ID"]].concepticon_gloss
         if target in common_concepts:
-            edges[target][5] = edge["AffixLngs"]
-            edges[target][6] = edge["AffixFams"]
+            edges[target][8] = edge["AffixLngs"]
+            edges[target][9] = edge["AffixFams"]
 
     for edge in c2.attributes["linked_concepts"]:
         target = clips.concepts[edge["ID"]].concepticon_gloss
         if target in common_concepts:
-            edges[target][7] = edge["FullLngs"]
-            edges[target][8] = edge["FullFams"]
+            edges[target][10] = edge["FullLngs"]
+            edges[target][11] = edge["FullFams"]
 
 
     for edge, vals in edges.items():
