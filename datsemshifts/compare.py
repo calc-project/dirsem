@@ -54,9 +54,9 @@ for row in dss_data:
     
     graph[row["SOURCE"]][row["TARGET"]]["Directed"] += directed
     graph[row["SOURCE"]][row["TARGET"]]["Undirected"] += undirected
-    graph[row["SOURCE"]][row["TARGET"]]["Polysemy"] += undirected
-    graph[row["SOURCE"]][row["TARGET"]]["Derivation"] += undirected
-    graph[row["SOURCE"]][row["TARGET"]]["Other"] += undirected
+    graph[row["SOURCE"]][row["TARGET"]]["Polysemy"] += polysemy
+    graph[row["SOURCE"]][row["TARGET"]]["Derivation"] += derivation
+    graph[row["SOURCE"]][row["TARGET"]]["Other"] += other
     graph[row["SOURCE"]][row["TARGET"]]["Languages"] += [row["Language"]]
     graph[row["SOURCE"]][row["TARGET"]]["Words"] += [row["Word"]]
 
