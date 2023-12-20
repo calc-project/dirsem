@@ -40,7 +40,7 @@ graph = defaultdict(
 for row in dss_data:
     s, t = row["SOURCE"], row["TARGET"]
     # check if polysemy or shift
-    if row["Direction"] in ['—', '↔']:
+    if row["Direction"] in ['—', '↔', ""]:
         graph[s][t]["Undirected"] += 1
         graph[t][s]["Undirected"] += 1
         graph[s][t]["Undirected_Evidence"] += [row["Type"]]
