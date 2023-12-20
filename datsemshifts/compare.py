@@ -95,10 +95,14 @@ table = [[
     "Polysemy_Families"
     ]]
 
+
+visited = set()
 for concept, (c1, c2) in concepts.items():
     edges = defaultdict(lambda : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     for edge, vals in c1.items():
         if edge in eng2con and eng2con[edge] in common_concepts:
+            visited.add((concept, eng2con[edge]))
+            visited.add((eng2con[edge], concept))
             edges[eng2con[edge]][0] += vals["Directed"]
             edges[eng2con[edge]][1] += vals["Directed_Evidence"].count("Polysemy")
             edges[eng2con[edge]][2] += vals["Directed_Evidence"].count("Derivation")
@@ -129,7 +133,7 @@ for concept, (c1, c2) in concepts.items():
 
 
     for edge, vals in edges.items():
-        if edge and (vals[0] or vals[1]):
+        if edge and (concept, edge) in visited:
             table += [[concept, edge] + vals]
 
 with UnicodeWriter("dss-clips.tsv", delimiter="\t") as writer:
