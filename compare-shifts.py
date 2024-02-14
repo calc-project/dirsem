@@ -76,6 +76,7 @@ def compare_lists(
         list_b, 
         threshold_a=2, 
         threshold_b=2,
+        threshold_u=1,
         smooth=0.001,):
     # assemble data for list vs. zalizniak
     visited = set()
@@ -101,7 +102,8 @@ def compare_lists(
                 directed_b2 = links[c2, c1][list_b][0]
     
                 if (directed_a1 >= threshold_a or directed_a2 >= threshold_a) and \
-                        (directed_b1 >= threshold_b or directed_b2 >= threshold_b):
+                        (directed_b1 >= threshold_b or directed_b2 >= threshold_b) \
+                        and undirected_a >= threshold_u:
                     if directed_a1 > directed_a2 and (directed_a1 + smooth) / \
                             (directed_a2 + smooth) > 1.1: 
                         direction_a = 1
@@ -150,39 +152,40 @@ print(
 
 paired_comparisons = [
         [
-            "Urban-Overt-Marking", 1,
+            "Urban-Overt-Marking", 1, 0,
             "Urban-Indo-Aryan", 1],
         [
-            "Urban-Overt-Marking", 1,
+            "Urban-Overt-Marking", 1, 0,
             "Zalizniak-Polysemy", 1],
         [
-            "Winter-Overt-Marking", 1,
+            "Winter-Overt-Marking", 1, 0,
             "Urban-Indo-Aryan", 1],
         [
-            "Winter-Overt-Marking", 1,
+            "Winter-Overt-Marking", 1, 0,
             "Zalizniak-Polysemy", 1],
         [
-            "List-Partial-Colexifications", 2,
+            "List-Partial-Colexifications", 2, 0,
             "Urban-Indo-Aryan", 1],
         [
-            "List-Partial-Colexifications", 3,
+            "List-Partial-Colexifications", 2, 0,
             "Zalizniak-Polysemy", 2],
         [
-            "List-Partial-Colexifications", 3,
+            "List-Partial-Colexifications", 2, 0,
             "Zalizniak-Derivation", 2],
         [
-            "Zalizniak-Derivation", 2,
+            "Zalizniak-Derivation", 2, 0,
             "Zalizniak-Polysemy", 2],
         ]
 general_summary = []
-for list_a, threshold_a, list_b, threshold_b in paired_comparisons:
+for list_a, threshold_a, threshold_u, list_b, threshold_b in paired_comparisons:
     predictions, summary = compare_lists(
             concept_lists,
             linked_data,
             list_a,
             list_b,
             threshold_a=threshold_a,
-            threshold_b=threshold_b
+            threshold_b=threshold_b,
+            threshold_u=threshold_u,
             )
     if summary:
         general_summary += [[list_a, list_b] + [row[1] for row in summary]]
