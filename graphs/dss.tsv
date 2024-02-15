@@ -1,0 +1,40 @@
+SOURCE_ID	SOURCE_NAME	TARGET_ID	TARGET_NAME	PolysemyByFamily	DerivationByFamily
+
+no conceptlist concept-lists/Zalizniak-2024-4853.tsv found
+usage: concepticon graph [-h]
+                         [--format {asciidoc,double_grid,double_outline,fancy_grid,fancy_outline,github,grid,heavy_grid,heavy_outline,html,jira,latex,latex_booktabs,latex_longtable,latex_raw,mediawiki,mixed_grid,mixed_outline,moinmoin,orgtbl,outline,pipe,plain,presto,pretty,psql,rounded_grid,rounded_outline,rst,simple,simple_grid,simple_outline,textile,tsv,unsafehtml,youtrack}]
+                         [--graph-column GRAPH_COLUMN] [--verbose]
+                         [--threshold THRESHOLD]
+                         [--threshold-property THRESHOLD_PROPERTY]
+                         [--weights WEIGHTS]
+                         CONCEPTLIST [CONCEPTLIST ...]
+
+Converts a concept list into a graph.
+
+Notes
+-----
+Expects well-formed concept lists as input, i.e. TSV files, with columns
+- ID
+- CONCEPTICON_ID
+- NUMBER
+- CONCEPTICON_GLOSS
+
+positional arguments:
+  CONCEPTLIST           Path to (or ID of) concept list in TSV format
+
+options:
+  -h, --help            show this help message and exit
+  --format {asciidoc,double_grid,double_outline,fancy_grid,fancy_outline,github,grid,heavy_grid,heavy_outline,html,jira,latex,latex_booktabs,latex_longtable,latex_raw,mediawiki,mixed_grid,mixed_outline,moinmoin,orgtbl,outline,pipe,plain,presto,pretty,psql,rounded_grid,rounded_outline,rst,simple,simple_grid,simple_outline,textile,tsv,unsafehtml,youtrack}
+                        Format of tabular output. (default: simple)
+  --graph-column GRAPH_COLUMN
+                        specify the column containing linked concepts
+                        (default: LINKED_CONCEPTS)
+  --verbose             print check descriptions (default: False)
+  --threshold THRESHOLD
+                        set the threshold for the inclusion of an edge
+                        (default: 0)
+  --threshold-property THRESHOLD_PROPERTY
+                        specify weight column for computing thresholds.
+                        (default: )
+  --weights WEIGHTS     specify weights to be listed in the graph, separated
+                        by comma. (default: [])
