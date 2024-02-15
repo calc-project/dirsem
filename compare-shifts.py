@@ -7,7 +7,9 @@ from tabulate import tabulate
 from collections import defaultdict
 from scipy.stats import kendalltau, spearmanr, binomtest
 import itertools
+from csvw import UnicodeWriter
 from pathlib import Path
+import networkx as nx
 
 def get_conceptlists():
     path = Path(__file__).parent / "concept-lists"
@@ -146,7 +148,7 @@ print("# Summary on the Concept Lists")
 print(
         tabulate(
             summary_table, 
-            tablefmt="pipe", 
+            tablefmt="latex", 
             headers=["Dataset", "Glosses", "Concepts (Linked to Concepticon)",
                      "Shifts"]))
 
@@ -170,6 +172,16 @@ paired_comparisons = [
             "List-Partial-Colexifications", 2, 0,
             "Zalizniak-Polysemy", 2],
         [
+            "List-Partial-Colexifications", 3, 0,
+            "Zalizniak-Polysemy", 2],
+        [
+            "List-Partial-Colexifications", 2, 1,
+            "Zalizniak-Polysemy", 2],
+        [
+            "List-Partial-Colexifications", 3, 1,
+            "Zalizniak-Polysemy", 2],
+
+        [
             "List-Partial-Colexifications", 2, 0,
             "Zalizniak-Derivation", 2],
         [
@@ -188,13 +200,53 @@ for list_a, threshold_a, threshold_u, list_b, threshold_b in paired_comparisons:
             threshold_u=threshold_u,
             )
     if summary:
-        general_summary += [[list_a, list_b] + [row[1] for row in summary]]
+        general_summary += [[list_a, list_b, threshold_a, threshold_b,
+                             threshold_u] + [row[1] for row in summary]]
+    with UnicodeWriter(Path(__file__).parent / "semantic-shifts" / "{0}_{1}_{2}_{3}_{4}.tsv".format(
+                list_a,
+                list_b,
+                threshold_a,
+                threshold_b,
+                threshold_u), delimiter="\t"
+                       ) as writer:
+        writer.writerow(
+                ["Number", "ConceptA", "ConceptB", "DirA", "DirB", 
+                 "LinksAAB", "LinksABA", "LinksBAB", "LinksBBA"]) 
+        for row in predictions:
+            writer.writerow(row)
 print("# Summary on Dataset Comparisons")
 print(tabulate(
     general_summary,
     tablefmt="pipe",
-    headers = ["List_A", "List_B", "Match Accuracy", "Test Items", "Spearman's R", "Significance"]
+    headers = ["List_A", "List_B", "T_A", "T_B", "T_P",  "Match Accuracy", "Test Items", "Spearman's R", "Significance"]
     ))
 
 
+# create a network to account for most of the shifts
+DG = nx.DiGraph()
+visited = set()
+for (conceptA, conceptB), data in linked_data.items():
+    if (conceptB, conceptA) not in visited:
+        if data["List-Partial-Colexifications"][0] and data["Zalizniak-Polysemy"][0] and data["Zalizniak-Derivation"][0]:
+            visited.add((conceptB, conceptA))
+            DG.add_edge(
+                    conceptA, 
+                    conceptB,
+                    clips=data["List-Partial-Colexifications"][0],
+                    polysemy=data["Zalizniak-Polysemy"][0],
+                    derivation=data["Zalizniak-Derivation"][0]
+                )
+            DG.add_edge(
+                    conceptB,
+                    conceptA,
+                    clips=linked_data[conceptB, conceptA]["List-Partial-Colexifications"][0],
+                    polysemy=linked_data[conceptB, conceptA]["Zalizniak-Polysemy"][0],
+                    derivation=linked_data[conceptB, conceptA]["Zalizniak-Derivation"][0]
+                    )
+with UnicodeWriter(Path(__file__).parent / "semantic-shifts" /
+                   "frequent-shifts.tsv", delimiter="\t") as writer:
+    writer.writerow(["Source", "Target", "CLIPS", "DSS-Polysemy", "DSS-Derivation"])
+    for nA, nB, data in DG.edges(data=True):
+        writer.writerow([nA, nB, data["clips"], data["polysemy"], data["derivation"]])
 
+                    
