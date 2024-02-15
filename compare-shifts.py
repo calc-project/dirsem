@@ -10,6 +10,8 @@ import itertools
 from csvw import UnicodeWriter
 from pathlib import Path
 import networkx as nx
+import warnings
+
 
 def get_conceptlists():
     path = Path(__file__).parent / "concept-lists"
@@ -47,6 +49,14 @@ def get_links(
     linkd = defaultdict(lambda : {
         k: [0, 0] for k in lists})
     for lst, (target_concept, linked_concept, cl) in lists.items():
+        # check for multi-match concept sets
+        visited = set()
+        for c in cl.concepts.values():
+            if c.concepticon_gloss and c.concepticon_gloss in visited:
+                warnings.warn("Concept List {0} has duplicate matches for {1}".format(
+                                  lst, 
+                                  c.concepticon_gloss))
+            visited.add(c.concepticon_gloss)
         linked = [c for c in cl.concepts.values() if c.concepticon_id]
         links = set()
         for c in cl.concepts.values():
