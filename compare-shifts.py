@@ -151,6 +151,32 @@ def compare_lists(
             ["Significance", "{0:.4f}".format(p)]]
     return predictions, summary
 
+
+def compare_graphs(name_a, threshold_a, name_b, threshold_b, list_a, list_b, idx_a, idx_b, links):
+    # get common concepts by checking for linked concepts
+    links_a, links_b = {}, {}
+    concepts_a, concepts_b = (
+            {c.concepticon_gloss for c in list_a.concepts.values()},
+            {c.concepticon_gloss for c in list_b.concepts.values()})
+    common_concepts = concepts_a.intersection(concepts_b)
+    linked_concepts = set()
+    for (a, b), data in links.items():
+        if a in common_concepts and b in common_concepts:
+            weight_a, weight_b = data[name_a][idx_a], data[name_b][idx_b]
+            if weight_a >= threshold_a:
+                links_a[a, b] = weight_a
+                linked_concepts.add((a, b))
+            if weight_b >= threshold_b:
+                links_b[a, b] = weight_b
+                linked_concepts.add((a, b))
+
+    # check only common links
+    common = {(a, b) for a, b in links_a if (a, b) in links_b}
+    only_a = {(a, b) for a, b in links_a if (a, b) not in links_b}
+    only_b = {(a, b) for a, b in links_b if (a, b) not in links_a}
+
+    return (common_concepts, common, only_a, only_b, linked_concepts)
+
 concept_lists = get_conceptlists()
 linked_data, summary_table = get_links(concept_lists)
 
@@ -164,40 +190,45 @@ print(
 
 paired_comparisons = [
         [
-            "Urban-Overt-Marking", 1, 0,
-            "Urban-Indo-Aryan", 1],
-        [
-            "Urban-Overt-Marking", 1, 0,
-            "Zalizniak-Polysemy", 1],
-        [
             "Winter-Overt-Marking", 1, 0,
             "Urban-Indo-Aryan", 1],
         [
             "Winter-Overt-Marking", 1, 0,
             "Zalizniak-Polysemy", 1],
         [
-            "List-Partial-Colexifications", 2, 0,
+            "List-Partial-Colexifications", 4, 0,
             "Urban-Indo-Aryan", 1],
         [
-            "List-Partial-Colexifications", 2, 0,
+            "List-Partial-Colexifications", 4, 0,
             "Zalizniak-Polysemy", 2],
         [
-            "List-Partial-Colexifications", 3, 0,
-            "Zalizniak-Polysemy", 2],
-        [
-            "List-Partial-Colexifications", 2, 1,
-            "Zalizniak-Polysemy", 2],
-        [
-            "List-Partial-Colexifications", 3, 1,
+            "List-Partial-Colexifications", 4, 1,
             "Zalizniak-Polysemy", 2],
 
         [
-            "List-Partial-Colexifications", 2, 0,
+            "List-Partial-Colexifications", 4, 0,
             "Zalizniak-Derivation", 2],
         [
             "Zalizniak-Derivation", 2, 0,
             "Zalizniak-Polysemy", 2],
         ]
+
+
+paired_graphs = [
+        [
+            "Affix Colexification", "List-Partial-Colexifications", 4, 0,
+            "Full Colexification", "List-Partial-Colexifications", 3, 1],
+        [
+            "Affix Colexification", "List-Partial-Colexifications", 4, 0,
+            "DSS Semantic Shift", "Zalizniak-Polysemy", 2, 0],
+        [
+            "Affix Colexification", "List-Partial-Colexifications", 4, 0,
+            "DSS Overt Marking", "Zalizniak-Derivation", 2, 0],
+        [
+            "DSS Overt Marking", "Zalizniak-Derivation", 2, 0,
+            "DSS Semantic Shift", "Zalizniak-Polysemy", 2, 0],
+        ]
+
 general_summary = []
 for list_a, threshold_a, threshold_u, list_b, threshold_b in paired_comparisons:
     predictions, summary = compare_lists(
@@ -231,13 +262,55 @@ print(tabulate(
     headers = ["List_A", "List_B", "T_A", "T_B", "T_P",  "Match Accuracy", "Test Items", "Spearman's R", "Significance"]
     ))
 
+graph_summary = []
+for (
+        name_a, list_a, threshold_a, idx_a, name_b, list_b, threshold_b, idx_b
+        ) in paired_graphs:
+    (
+            common_concepts,
+            common_links,
+            links_a,
+            links_b,
+            all_links) = compare_graphs(
+                    list_a,
+                    threshold_a,
+                    list_b, 
+                    threshold_b,
+                    concept_lists[list_a][2],
+                    concept_lists[list_b][2],
+                    idx_a,
+                    idx_b,
+                    linked_data
+                    )
+    graph_summary += [[
+        name_a,
+        name_b,
+        len(common_concepts),
+        len(common_links),
+        len(all_links),
+        "{0:.2f}".format(len(common_links) / len(all_links))]]
 
+print("# Summary on Graph Comparisons (Shared Links)")
+print(
+        tabulate(graph_summary,
+                 tablefmt="pipe",
+                 headers=["List_A", "List_B", "Concepts",
+                 "Common Links", "All Links", "Proportion"]))
 # create a network to account for most of the shifts
 DG = nx.DiGraph()
 visited = set()
-for (conceptA, conceptB), data in linked_data.items():
+for (conceptA, conceptB), data in list(linked_data.items()):
     if (conceptB, conceptA) not in visited:
-        if data["List-Partial-Colexifications"][0] and data["Zalizniak-Polysemy"][0] and data["Zalizniak-Derivation"][0]:
+        if (
+                data["List-Partial-Colexifications"][0] or 
+                linked_data[conceptB, conceptA]["List-Partial-Colexifications"][0]
+                ) and (
+                   data["Zalizniak-Polysemy"][0] or 
+                   linked_data[conceptB, conceptA]["Zalizniak-Polysemy"][0]
+                   ) and (
+                   data["Zalizniak-Derivation"][0] or 
+                   linked_data[conceptB, conceptA]["Zalizniak-Derivation"][0]
+                   ):
             visited.add((conceptB, conceptA))
             DG.add_edge(
                     conceptA, 
@@ -253,6 +326,7 @@ for (conceptA, conceptB), data in linked_data.items():
                     polysemy=linked_data[conceptB, conceptA]["Zalizniak-Polysemy"][0],
                     derivation=linked_data[conceptB, conceptA]["Zalizniak-Derivation"][0]
                     )
+print("Graph has {0} nodes and {1} edges".format(len(DG), len(DG.edges)))
 with UnicodeWriter(Path(__file__).parent / "semantic-shifts" /
                    "frequent-shifts.tsv", delimiter="\t") as writer:
     writer.writerow(["Source", "Target", "CLIPS", "DSS-Polysemy", "DSS-Derivation"])
