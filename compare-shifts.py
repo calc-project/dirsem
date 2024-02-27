@@ -310,9 +310,18 @@ print(
 # create a network to account for most of the shifts
 DG = nx.DiGraph()
 visited = set()
-for (conceptA, conceptB), data in linked_data.items():
+for (conceptA, conceptB), data in list(linked_data.items()):
     if (conceptB, conceptA) not in visited:
-        if data["List-Partial-Colexifications"][0] and data["Zalizniak-Polysemy"][0] and data["Zalizniak-Derivation"][0]:
+        if (
+                data["List-Partial-Colexifications"][0] or 
+                linked_data[conceptB, conceptA]["List-Partial-Colexifications"][0]
+                ) and (
+                   data["Zalizniak-Polysemy"][0] or 
+                   linked_data[conceptB, conceptA]["Zalizniak-Polysemy"][0]
+                   ) and (
+                   data["Zalizniak-Derivation"][0] or 
+                   linked_data[conceptB, conceptA]["Zalizniak-Derivation"][0]
+                   ):
             visited.add((conceptB, conceptA))
             DG.add_edge(
                     conceptA, 
@@ -328,6 +337,7 @@ for (conceptA, conceptB), data in linked_data.items():
                     polysemy=linked_data[conceptB, conceptA]["Zalizniak-Polysemy"][0],
                     derivation=linked_data[conceptB, conceptA]["Zalizniak-Derivation"][0]
                     )
+print("Graph has {0} nodes and {1} edges".format(len(DG), len(DG.edges)))
 with UnicodeWriter(Path(__file__).parent / "semantic-shifts" /
                    "frequent-shifts.tsv", delimiter="\t") as writer:
     writer.writerow(["Source", "Target", "CLIPS", "DSS-Polysemy", "DSS-Derivation"])
