@@ -337,7 +337,13 @@ for (conceptA, conceptB), data in list(linked_data.items()):
                     polysemy=linked_data[conceptB, conceptA]["Zalizniak-Polysemy"][0],
                     derivation=linked_data[conceptB, conceptA]["Zalizniak-Derivation"][0]
                     )
+G = nx.Graph()
+for a, b in DG.edges():
+    G.add_edge(a, b)
+comps = list(nx.connected_components(G))
 print("Graph has {0} nodes and {1} edges".format(len(DG), len(DG.edges)))
+print("largest component {0}".format(max([len(c) for c in comps])))
+print("all components {0}".format(len(comps)))
 with UnicodeWriter(Path(__file__).parent / "semantic-shifts" /
                    "frequent-shifts.tsv", delimiter="\t") as writer:
     writer.writerow(["Source", "Target", "CLIPS", "DSS-Polysemy", "DSS-Derivation"])
