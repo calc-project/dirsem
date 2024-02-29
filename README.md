@@ -2,7 +2,7 @@
 
 When using the data, please quote the original paper (currently under review):
 
-> Bocklage, Katja; DiNatale, Anna; Tjuka, Annika; and List, Johann-Mattis (2024): Directional Tendencies in Semantic Change. [paper currently under review]
+> Bocklage, Katja; Di Natale, Anna; Tjuka, Annika; and List, Johann-Mattis (2024): Directional Tendencies in Semantic Change. [paper currently under review]
 
 ## Installation
 To install all relevant software packages needed to repeat the analyzes described in the paper, please install all Python packages with `pip`:
